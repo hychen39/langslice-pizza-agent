@@ -299,13 +299,11 @@ def add_pizza_to_order(
         ingredient = db.get_ingredient(requested)
         if ingredient is None:
             unknown.append(requested)
-
         #                     FIX
         ##################################################
         # elif ingredient["stock_units"] <= 0:
         #     out_of_stock.append(requested)
         ##################################################
-
         else:
             resolved.append(ingredient)
 

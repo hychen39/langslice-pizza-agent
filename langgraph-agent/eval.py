@@ -14,6 +14,7 @@ def evaluation_target(inputs: dict) -> dict:
     history = [AIMessage(content=GREETING)]
     thread_id = f"eval-{uuid.uuid4()}"
 
+    # 產生 Initital State for the agent (Initial conversation history)
     for message in inputs.get("messages", []):
         # Examples created from LangSmith traces use LangChain's serialized
         # message shape (``type=human``), while hand-authored examples often
@@ -23,6 +24,8 @@ def evaluation_target(inputs: dict) -> dict:
             continue
 
         history.append(HumanMessage(content=message["content"]))
+
+        # Invoke your agent
         result = pizza_agent.invoke(
             {"messages": history},
             config={"configurable": {"thread_id": thread_id}},
@@ -33,7 +36,7 @@ def evaluation_target(inputs: dict) -> dict:
 
 
 def main() -> None:
-    dataset = os.environ["DATASET_NAME"]
+    dataset = os.environ["DATASET_NAME"] if "DATASET_NAME" in os.environ else "langslice-dataset"
 
     evaluate(
         evaluation_target,

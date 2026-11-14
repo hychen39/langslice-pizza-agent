@@ -2,13 +2,17 @@
 
 import json
 
+from langsmith.schemas import Run, Example
+
 import database as db
 
 
-def ingredient_stock_evaluator(run, example=None):
+def ingredient_stock_evaluator(run:Run, example:Example=None):
     outputs = run.outputs if hasattr(run, "outputs") else run.get("outputs", {})
     outputs = outputs or {}
 
+    # Iterate through the tool messages in reverse order to find the most recent order
+    # Connect to the database to check stock levels for each topping in the order
     for message in reversed(outputs.get("messages", [])):
         if isinstance(message, dict):
             role = message.get("role") or message.get("type")
@@ -25,6 +29,7 @@ def ingredient_stock_evaluator(run, example=None):
         if not order:
             continue
 
+        # # Connect to the database to check stock levels for each topping
         out_of_stock = {
             topping
             for pizza in order["pizzas"]

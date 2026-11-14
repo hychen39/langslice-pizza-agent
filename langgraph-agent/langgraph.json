@@ -5,7 +5,7 @@
   "graphs": {
     "pizza_agent": "./agent.py:pizza_agent"
   },
-  "env": "../.env",
+  "env": "./.env",
   "http": {
     "app": "./ui/app.py:app"
   }
